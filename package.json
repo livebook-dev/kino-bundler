@@ -1,0 +1,19 @@
+{
+  "name": "@livebook/kino-bundler",
+  "version": "0.1.0",
+  "description": "A wrapper around common build tools for Kino assets",
+  "bin": {
+    "kino-bundler": "bin/bundler.js"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.17",
+    "esbuild": "^0.20.0",
+    "esbuild-style-plugin": "^1.6.3",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/livebook-dev/kino-bundler.git"
+  }
+}
