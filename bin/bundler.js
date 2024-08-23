@@ -7,11 +7,19 @@ const fs = require("fs");
 const { build } = require("../src/build");
 
 async function main() {
-  const input = "src/main.js";
-
   try {
     const args = util.parseArgs({
       options: {
+        input: {
+          type: "string",
+          default: "src/main.js",
+        },
+        "tailwind-content-glob": {
+          type: "string",
+          default: ["./src/**/*.js"],
+          multiple: true,
+          short: "c",
+        },
         outdir: {
           type: "string",
         },
@@ -26,9 +34,9 @@ async function main() {
       },
     });
 
-    if (!fs.existsSync(input)) {
+    if (!fs.existsSync(args.values.input)) {
       throw new Error(
-        "Expected src/main.js to exist, but no such file has been found",
+        `Expected ${args.values.input} to exist, but no such file has been found`
       );
     }
 
@@ -38,8 +46,9 @@ async function main() {
 
     const outdir = args.values.outdir;
     const options = { prod: !args.values.dev, watch: args.values.watch };
+    const tailwindContentGlob = args.values["tailwind-content-glob"];
 
-    await build(input, outdir, options);
+    await build(args.values.input, outdir, tailwindContentGlob, options);
     process.exit(0);
   } catch (error) {
     console.error(error.message);
