@@ -5,15 +5,16 @@ const stylePlugin = require("esbuild-style-plugin");
 const tailwind = require("tailwindcss");
 const autoprefixer = require("autoprefixer");
 
-const tailwindConfig = require("../tailwind.config.js");
+const tailwindConfigBase = require("../tailwind.config.js");
 
 module.exports.build = async function (
-  input,
+  entrypint,
   outdir,
+  tailwindDirs,
   { prod = true, watch = false } = {},
 ) {
   if (fs.existsSync(outdir)) {
-    const mainOutputName = path.basename(input);
+    const mainOutputName = "main.js";
 
     // Check for the main output as a simple heuristic to avoid removing
     // the directory if the user specified a wrong one
@@ -21,13 +22,18 @@ module.exports.build = async function (
       fs.rmSync(outdir, { recursive: true, force: true });
     } else {
       throw new Error(
-        `The output directory is not empty, but does not contain ${mainOutputName}. Are you sure you specified the right output directory? If you are sure, then remove the output directory manually and run the build again.`,
+        `The output directory ${outdir} is not empty, but does not contain ${mainOutputName}. Are you sure you specified the right output directory? If you are sure, then remove the output directory manually and run the build again.`,
       );
     }
   }
 
+  const tailwindConfig = {
+    ...tailwindConfigBase,
+    content: tailwindDirs.map((dir) => `${dir}/**/*.{js,ts,jsx,tsx}`),
+  };
+
   const ctx = await esbuild.context({
-    entryPoints: [input],
+    entryPoints: [entrypint],
     outdir: outdir,
     bundle: true,
     splitting: true,

@@ -1,5 +1,4 @@
 module.exports = {
-  content: ["./src/**/*.js"],
   theme: {
     fontFamily: {
       sans: ["Inter"],
